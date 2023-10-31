@@ -7,7 +7,7 @@ Examples usage in repositories:
 ## Dependency
 ```
 dependencies {
-    implementation("io.github.cdsap:jdk-tools-parser:0.1.0")
+    implementation("io.github.cdsap:commandline-value-source:0.1.0")
 }
 ```
 
