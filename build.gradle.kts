@@ -1,9 +1,7 @@
 plugins {
-    kotlin("jvm") version "1.8.0"
-    application
+    `kotlin-dsl`
     `maven-publish`
     `signing`
-    `kotlin-dsl`
 }
 
 group = "io.github.cdsap"
@@ -18,6 +16,7 @@ repositories {
 dependencies {
     implementation("com.gradle.enterprise:com.gradle.enterprise.gradle.plugin:3.12.3")
     testImplementation(kotlin("test"))
+    testImplementation(gradleTestKit())
 }
 
 tasks.test {
@@ -25,7 +24,7 @@ tasks.test {
 }
 
 kotlin {
-    jvmToolchain(11)
+    jvmToolchain(17)
 }
 
 configure<JavaPluginExtension> {
