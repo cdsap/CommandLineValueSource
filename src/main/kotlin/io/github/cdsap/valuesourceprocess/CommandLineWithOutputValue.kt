@@ -18,20 +18,24 @@ abstract class CommandLineWithOutputValue : ValueSource<String, CommandLineWithO
     abstract val execOperations: ExecOperations
 
     override fun obtain(): String {
-        val output = ByteArrayOutputStream()
-        val error = ByteArrayOutputStream()
         return try {
-            execOperations.exec {
-                try {
-                    commandLine("sh", "-c", parameters.commands.get())
-                    standardOutput = output
-                    errorOutput = error
-                } catch (e: Exception) {
-                }
-            }
-            String(output.toByteArray(), Charset.defaultCharset())
+            executeCommand(parameters.commands.get())
         } catch (e: ExecException) {
             ""
         }
+    }
+
+    private fun executeCommand(command: String): String {
+        val output = ByteArrayOutputStream()
+        val error = ByteArrayOutputStream()
+        execOperations.exec {
+            try {
+                commandLine("sh", "-c", command)
+                standardOutput = output
+                errorOutput = error
+            } catch (e: Exception) {
+            }
+        }
+        return String(output.toByteArray(), Charset.defaultCharset())
     }
 }
