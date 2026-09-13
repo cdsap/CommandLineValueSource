@@ -10,9 +10,3 @@ fun Project.jStat(processName: String): Provider<String> {
 fun Project.jInfo(processName: String): Provider<String> {
     return execute("jps | grep $processName | sed 's/$processName//' | while read ln; do  jinfo \$ln  | grep \"XX:MaxHeapSize\"; echo \"\$ln\";  done")
 }
-
-fun Project.execute(command: String): Provider<String> {
-    return providers.of(CommandLineWithOutputValue::class.java) {
-        parameters.commands.set(command)
-    }
-}
