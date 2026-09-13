@@ -35,4 +35,26 @@ class CommandLineWithOutputValueFunctionalTest {
         // No matching process is fine; the provider must still resolve without throwing.
         provider.get()
     }
+
+    @Test
+    fun `jInfo provider is wired to command line value source`() {
+        val project = ProjectBuilder.builder().build()
+        val provider = project.jInfo("NonExistentProcessNameForTest")
+
+        assertTrue(provider.isPresent)
+        // No matching process is fine; the provider must still resolve without throwing.
+        provider.get()
+    }
+
+    @Test
+    fun `execute uses CommandLineWithOutputValue for failed commands`() {
+        val project = ProjectBuilder.builder().build()
+        val viaExecute = project.execute("exit 1").get()
+        val viaValueSource = project.providers.of(CommandLineWithOutputValue::class.java) {
+            parameters.commands.set("exit 1")
+        }.get()
+
+        assertEquals("", viaExecute)
+        assertEquals(viaValueSource, viaExecute)
+    }
 }
