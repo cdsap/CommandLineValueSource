@@ -29,6 +29,16 @@ class CommandLineWithOutputValueTest {
         assertEquals("", valueSource.obtain())
     }
 
+    @Test
+    fun `command line setup ExecException returns empty string`() {
+        val valueSource = testableValueSource(
+            FakeExecOperations(commandLineFailure = ExecException("command setup failed")),
+            command = "echo output"
+        )
+
+        assertEquals("", valueSource.obtain())
+    }
+
     private fun testableValueSource(
         execOperations: ExecOperations,
         command: String

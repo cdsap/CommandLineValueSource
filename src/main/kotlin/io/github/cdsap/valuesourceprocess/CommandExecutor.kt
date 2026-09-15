@@ -11,12 +11,9 @@ internal class CommandExecutor(
         val output = ByteArrayOutputStream()
         val error = ByteArrayOutputStream()
         execOperations.exec {
-            try {
-                commandLine("sh", "-c", command)
-                standardOutput = output
-                errorOutput = error
-            } catch (e: Exception) {
-            }
+            commandLine("sh", "-c", command)
+            standardOutput = output
+            errorOutput = error
         }
         return String(output.toByteArray(), Charset.defaultCharset())
     }

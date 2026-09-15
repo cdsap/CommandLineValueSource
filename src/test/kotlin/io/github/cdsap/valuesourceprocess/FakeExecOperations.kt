@@ -11,7 +11,8 @@ import java.lang.reflect.Proxy
 
 internal class FakeExecOperations(
     private val stdout: ByteArray = byteArrayOf(),
-    private val failure: ExecException? = null
+    private val failure: ExecException? = null,
+    private val commandLineFailure: ExecException? = null
 ) : ExecOperations {
     var lastCommandLine: List<String> = emptyList()
         private set
@@ -28,6 +29,7 @@ internal class FakeExecOperations(
         ) { _, method, args ->
             when (method.name) {
                 "setCommandLine", "commandLine" -> {
+                    commandLineFailure?.let { throw it }
                     lastCommandLine = flattenCommandLineArgs(args)
                     null
                 }

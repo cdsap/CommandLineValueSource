@@ -37,4 +37,16 @@ class CommandExecutorTest {
             executor.execute("exit 1")
         }
     }
+
+    @Test
+    fun `execute propagates ExecException from command line setup`() {
+        val execOperations = FakeExecOperations(
+            commandLineFailure = ExecException("command setup failed")
+        )
+        val executor = CommandExecutor(execOperations)
+
+        assertFailsWith<ExecException> {
+            executor.execute("echo output")
+        }
+    }
 }
