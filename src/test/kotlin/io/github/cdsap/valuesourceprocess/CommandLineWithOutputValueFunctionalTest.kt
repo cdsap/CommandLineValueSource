@@ -17,6 +17,24 @@ class CommandLineWithOutputValueFunctionalTest {
     }
 
     @Test
+    fun `commandOutput returns command stdout without Project execute`() {
+        val project = ProjectBuilder.builder().build()
+        val output = project.providers.commandOutput("echo hello-value-source").get()
+
+        assertContains(output, "hello-value-source")
+    }
+
+    @Test
+    fun `execute delegates to commandOutput`() {
+        val project = ProjectBuilder.builder().build()
+        val viaExecute = project.execute("echo hello-value-source").get()
+        val viaCommandOutput = project.providers.commandOutput("echo hello-value-source").get()
+
+        assertContains(viaExecute, "hello-value-source")
+        assertEquals(viaCommandOutput, viaExecute)
+    }
+
+    @Test
     fun `command line value source returns empty string when command fails`() {
         val project = ProjectBuilder.builder().build()
         val output = project.providers.of(CommandLineWithOutputValue::class.java) {
