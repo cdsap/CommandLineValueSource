@@ -4,7 +4,7 @@ import org.gradle.api.Project
 import org.gradle.api.provider.Provider
 
 fun Project.execute(command: String): Provider<String> {
-    return providers.commandOutput(command)
+    return providers.execute(command)
 }
 
 fun Project.jStat(processName: String): Provider<String> {

@@ -17,6 +17,14 @@ class CommandLineWithOutputValueFunctionalTest {
     }
 
     @Test
+    fun `ProviderFactory execute returns command stdout without Project execute`() {
+        val project = ProjectBuilder.builder().build()
+        val output = project.providers.execute("echo hello-value-source").get()
+
+        assertContains(output, "hello-value-source")
+    }
+
+    @Test
     fun `commandOutput returns command stdout without Project execute`() {
         val project = ProjectBuilder.builder().build()
         val output = project.providers.commandOutput("echo hello-value-source").get()
@@ -25,13 +33,22 @@ class CommandLineWithOutputValueFunctionalTest {
     }
 
     @Test
-    fun `execute delegates to commandOutput`() {
+    fun `execute delegates to ProviderFactory execute`() {
         val project = ProjectBuilder.builder().build()
         val viaExecute = project.execute("echo hello-value-source").get()
-        val viaCommandOutput = project.providers.commandOutput("echo hello-value-source").get()
+        val viaProviderFactory = project.providers.execute("echo hello-value-source").get()
 
         assertContains(viaExecute, "hello-value-source")
-        assertEquals(viaCommandOutput, viaExecute)
+        assertEquals(viaProviderFactory, viaExecute)
+    }
+
+    @Test
+    fun `commandOutput delegates to ProviderFactory execute`() {
+        val project = ProjectBuilder.builder().build()
+        val viaCommandOutput = project.providers.commandOutput("echo hello-value-source").get()
+        val viaProviderFactory = project.providers.execute("echo hello-value-source").get()
+
+        assertEquals(viaProviderFactory, viaCommandOutput)
     }
 
     @Test
