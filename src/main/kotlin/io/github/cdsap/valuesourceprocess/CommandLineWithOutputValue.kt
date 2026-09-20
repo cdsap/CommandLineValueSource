@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 abstract class CommandLineWithOutputValue : ValueSource<String, CommandLineWithOutputValue.Parameters> {
     interface Parameters : ValueSourceParameters {
-        val commands: Property<String>
+        val command: Property<String>
     }
 
     @get:Inject
@@ -17,7 +17,7 @@ abstract class CommandLineWithOutputValue : ValueSource<String, CommandLineWithO
 
     override fun obtain(): String {
         return try {
-            CommandExecutor(execOperations).execute(parameters.commands.get())
+            CommandExecutor(execOperations).execute(parameters.command.get())
         } catch (e: ExecException) {
             ""
         }

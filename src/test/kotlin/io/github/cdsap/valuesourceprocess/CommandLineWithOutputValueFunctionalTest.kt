@@ -55,7 +55,7 @@ class CommandLineWithOutputValueFunctionalTest {
     fun `command line value source returns empty string when command fails`() {
         val project = ProjectBuilder.builder().build()
         val output = project.providers.of(CommandLineWithOutputValue::class.java) {
-            parameters.commands.set("exit 1")
+            parameters.command.set("exit 1")
         }.get()
 
         assertEquals("", output)
@@ -86,7 +86,7 @@ class CommandLineWithOutputValueFunctionalTest {
         val project = ProjectBuilder.builder().build()
         val viaExecute = project.execute("exit 1").get()
         val viaValueSource = project.providers.of(CommandLineWithOutputValue::class.java) {
-            parameters.commands.set("exit 1")
+            parameters.command.set("exit 1")
         }.get()
 
         assertEquals("", viaExecute)
