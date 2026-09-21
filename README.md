@@ -16,7 +16,7 @@ dependencies {
 ```
 val commnandExample = "jps | grep KotlinCompileDaemon | sed 's/KotlinCompileDaemon//' | while read ln; do  jstat -gc -t \$ln; echo \"\$ln\"; done"
 val example = providers.of(CommandLineWithOutputValue::class.java) {
-     parameters.commands.set("jps")
+     parameters.command.set("jps")
 }.get()
 ```
 In this simple use case the value example is:

@@ -44,16 +44,16 @@ class CommandLineWithOutputValueTest {
         command: String
     ): CommandLineWithOutputValue {
         val project = ProjectBuilder.builder().build()
-        val commands = project.objects.property(String::class.java)
-        commands.set(command)
+        val commandProperty = project.objects.property(String::class.java)
+        commandProperty.set(command)
         return TestableCommandLineWithOutputValue(
             execOperationsOverride = execOperations,
-            parametersOverride = TestParameters(commands)
+            parametersOverride = TestParameters(commandProperty)
         )
     }
 
     private class TestParameters(
-        override val commands: Property<String>
+        override val command: Property<String>
     ) : CommandLineWithOutputValue.Parameters
 
     private class TestableCommandLineWithOutputValue(

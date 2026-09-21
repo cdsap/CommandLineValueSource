@@ -5,7 +5,7 @@ import org.gradle.api.provider.ProviderFactory
 
 fun ProviderFactory.execute(command: String): Provider<String> {
     return of(CommandLineWithOutputValue::class.java) {
-        parameters.commands.set(command)
+        parameters.command.set(command)
     }
 }
 
