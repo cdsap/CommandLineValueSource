@@ -72,6 +72,16 @@ class CommandLineWithOutputValueFunctionalTest {
     }
 
     @Test
+    fun `jStat resolves through Project execute`() {
+        val project = ProjectBuilder.builder().build()
+        val processName = "NonExistentProcessNameForTest"
+        val command =
+            "jps | grep $processName | sed 's/$processName//' | while read ln; do  jstat -gc -t \$ln; echo \"\$ln\"; done"
+
+        assertEquals(project.execute(command).get(), project.jStat(processName).get())
+    }
+
+    @Test
     fun `jInfo provider is wired to command line value source`() {
         val project = ProjectBuilder.builder().build()
         val provider = project.jInfo("NonExistentProcessNameForTest")
@@ -79,6 +89,16 @@ class CommandLineWithOutputValueFunctionalTest {
         assertTrue(provider.isPresent)
         // No matching process is fine; the provider must still resolve without throwing.
         provider.get()
+    }
+
+    @Test
+    fun `jInfo resolves through Project execute`() {
+        val project = ProjectBuilder.builder().build()
+        val processName = "NonExistentProcessNameForTest"
+        val command =
+            "jps | grep $processName | sed 's/$processName//' | while read ln; do  jinfo \$ln  | grep \"XX:MaxHeapSize\"; echo \"\$ln\";  done"
+
+        assertEquals(project.execute(command).get(), project.jInfo(processName).get())
     }
 
     @Test
