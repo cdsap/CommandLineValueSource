@@ -62,6 +62,16 @@ class CommandLineWithOutputValueFunctionalTest {
     }
 
     @Test
+    fun `command line value source returns empty string when command writes stdout and fails`() {
+        val project = ProjectBuilder.builder().build()
+        val output = project.providers.of(CommandLineWithOutputValue::class.java) {
+            parameters.command.set("printf output; exit 1")
+        }.get()
+
+        assertEquals("", output)
+    }
+
+    @Test
     fun `jStat provider is wired to command line value source`() {
         val project = ProjectBuilder.builder().build()
         val provider = project.jStat("NonExistentProcessNameForTest")
