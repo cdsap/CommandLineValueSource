@@ -1,6 +1,7 @@
 package io.github.cdsap.valuesourceprocess
 
 import org.gradle.process.ExecOperations
+import org.gradle.process.internal.ExecException
 import java.io.ByteArrayOutputStream
 import java.nio.charset.Charset
 
@@ -9,12 +10,14 @@ internal class CommandExecutor(
 ) {
     fun execute(command: String): String {
         val output = ByteArrayOutputStream()
-        val error = ByteArrayOutputStream()
-        execOperations.exec {
-            commandLine("sh", "-c", command)
-            standardOutput = output
-            errorOutput = error
+        return try {
+            execOperations.exec {
+                commandLine("sh", "-c", command)
+                standardOutput = output
+            }
+            String(output.toByteArray(), Charset.defaultCharset())
+        } catch (e: ExecException) {
+            ""
         }
-        return String(output.toByteArray(), Charset.defaultCharset())
     }
 }

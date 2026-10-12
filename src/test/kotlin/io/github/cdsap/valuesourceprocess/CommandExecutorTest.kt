@@ -3,7 +3,6 @@ package io.github.cdsap.valuesourceprocess
 import org.gradle.process.internal.ExecException
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
 
 class CommandExecutorTest {
 
@@ -29,24 +28,20 @@ class CommandExecutorTest {
     }
 
     @Test
-    fun `execute propagates ExecException from ExecOperations`() {
+    fun `execute returns empty string when ExecOperations fails`() {
         val execOperations = FakeExecOperations(failure = ExecException("command failed"))
         val executor = CommandExecutor(execOperations)
 
-        assertFailsWith<ExecException> {
-            executor.execute("exit 1")
-        }
+        assertEquals("", executor.execute("exit 1"))
     }
 
     @Test
-    fun `execute propagates ExecException from command line setup`() {
+    fun `execute returns empty string when command line setup fails`() {
         val execOperations = FakeExecOperations(
             commandLineFailure = ExecException("command setup failed")
         )
         val executor = CommandExecutor(execOperations)
 
-        assertFailsWith<ExecException> {
-            executor.execute("echo output")
-        }
+        assertEquals("", executor.execute("echo output"))
     }
 }
