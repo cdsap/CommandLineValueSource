@@ -11,11 +11,16 @@ internal class CommandExecutor(
     fun execute(command: String): String {
         val output = ByteArrayOutputStream()
         return try {
-            execOperations.exec {
+            val result = execOperations.exec {
                 commandLine("sh", "-c", command)
                 standardOutput = output
+                isIgnoreExitValue = true
             }
-            String(output.toByteArray(), Charset.defaultCharset())
+            if (result.exitValue == 0) {
+                String(output.toByteArray(), Charset.defaultCharset())
+            } else {
+                ""
+            }
         } catch (e: ExecException) {
             ""
         }
