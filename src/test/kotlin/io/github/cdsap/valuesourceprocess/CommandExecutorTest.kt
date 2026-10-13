@@ -3,6 +3,7 @@ package io.github.cdsap.valuesourceprocess
 import org.gradle.process.internal.ExecException
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 class CommandExecutorTest {
 
@@ -43,5 +44,16 @@ class CommandExecutorTest {
         val executor = CommandExecutor(execOperations)
 
         assertEquals("", executor.execute("echo output"))
+    }
+
+    @Test
+    fun `execute does not hide non ExecException command line setup failures`() {
+        val failure = IllegalArgumentException("invalid command configuration")
+        val execOperations = FakeExecOperations(commandLineRuntimeFailure = failure)
+        val executor = CommandExecutor(execOperations)
+
+        assertFailsWith<IllegalArgumentException> {
+            executor.execute("echo output")
+        }
     }
 }
